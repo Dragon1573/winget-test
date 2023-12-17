@@ -19,13 +19,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@latest
+        uses: actions/checkout@v4.1.1
         with:
           repository: Dragon1573/winget-pkgs
           ref: "${{ inputs.branch }}"
           sparse-checkout: "${{ inputs.path }}"
       - name: Install winget
-        uses: Cyberboss/install-winget@latest
+        uses: Cyberboss/install-winget@v1
       - name: Enable features
         run: winget config --enable LocalManifestFiles
       - name: Install package
