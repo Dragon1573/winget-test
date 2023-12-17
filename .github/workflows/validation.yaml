@@ -1,0 +1,32 @@
+name: Validation Pipeline
+
+on: 
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Target branch to validate"
+        required: true
+        type: string
+        default: master
+      path:
+        description: "Path to the manifest"
+        required: true
+        type: string
+
+jobs:
+  validate:
+    name: Validate manifests
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@latest
+        with:
+          repository: Dragon1573/winget-pkgs
+          ref: "${{ inputs.branch }}"
+          sparse-checkout: "${{ inputs.path }}"
+      - name: Install winget
+        uses: Cyberboss/install-winget@latest
+      - name: Enable features
+        run: winget config --enable LocalManifestFiles
+      - name: Install package
+        run: winget install --manifest "${{ inputs.path }}"
