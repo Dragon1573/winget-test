@@ -29,4 +29,8 @@ jobs:
       - name: Enable features
         run: winget config --enable LocalManifestFiles
       - name: Install package
-        run: winget install --manifest "${{ inputs.path }}"
+        # We have to silently install everything on CI/CD, disable Microsoft SmartScreen,
+        # and silently accept all agreements to prevent installation fail.
+        run: |-
+          winget install --manifest "${{ inputs.path }}" `
+            --silent --ignore-local-archive-malware-scan --accept-package-agreements --accept-source-agreements
