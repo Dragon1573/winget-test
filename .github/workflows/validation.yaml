@@ -27,7 +27,10 @@ jobs:
       - name: Install winget
         uses: Cyberboss/install-winget@v1
       - name: Enable features
-        run: winget config --enable LocalManifestFiles
+        # Unlock 2 important limitations for further tests.
+        run: |-
+          winget config --enable LocalManifestFiles
+          winget settings --enable LocalArchiveMalwareScanOverride
       - name: Install package
         # We have to silently install everything on CI/CD, disable Microsoft SmartScreen,
         # and silently accept all agreements to prevent installation fail.
