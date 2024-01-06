@@ -1,8 +1,12 @@
 name: Validation Pipeline
 
-on: 
+on:
   workflow_dispatch:
     inputs:
+      repository:
+        description: "Target repository to checkout"
+        required: true
+        type: string
       branch:
         description: "Target branch to validate"
         required: true
@@ -21,19 +25,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.1.1
         with:
-          repository: Dragon1573/winget-pkgs
+          repository: "${{ inputs.repository }}"
           ref: "${{ inputs.branch }}"
           sparse-checkout: "${{ inputs.path }}"
       - name: Install winget
         uses: Cyberboss/install-winget@v1
       - name: Enable features
-        # Unlock 2 important limitations for further tests.
         run: |-
+          # Unlock 2 important limitations for further tests.
           winget config --enable LocalManifestFiles
           winget settings --enable LocalArchiveMalwareScanOverride
       - name: Install package
-        # We have to silently install everything on CI/CD, disable Microsoft SmartScreen,
-        # and silently accept all agreements to prevent installation fail.
         run: |-
+          # We have to silently install everything on CI/CD, disable Microsoft SmartScreen,
+          # and silently accept all agreements to prevent installation fail.
           winget install --manifest "${{ inputs.path }}" `
             --silent --ignore-local-archive-malware-scan --accept-package-agreements --accept-source-agreements
