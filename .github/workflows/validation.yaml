@@ -7,11 +7,11 @@ on:
         description: "Target repository to checkout"
         required: true
         type: string
+        default: "${{ github.repository_owner }}/winget-pkgs"
       branch:
         description: "Target branch to validate"
         required: true
         type: string
-        default: master
       path:
         description: "Path to the manifest"
         required: true
@@ -34,10 +34,9 @@ jobs:
         run: |-
           # Unlock 2 important limitations for further tests.
           winget config --enable LocalManifestFiles
-          winget settings --enable LocalArchiveMalwareScanOverride
       - name: Install package
         run: |-
           # We have to silently install everything on CI/CD, disable Microsoft SmartScreen,
           # and silently accept all agreements to prevent installation fail.
           winget install --manifest "${{ inputs.path }}" `
-            --silent --ignore-local-archive-malware-scan --accept-package-agreements --accept-source-agreements
+            --silent --accept-package-agreements --accept-source-agreements
