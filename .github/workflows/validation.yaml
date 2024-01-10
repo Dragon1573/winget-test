@@ -7,7 +7,7 @@ on:
         description: "Target repository to checkout"
         required: true
         type: string
-        default: "${{ github.repository_owner }}/winget-pkgs"
+        default: "Dragon1573/winget-pkgs"
       branch:
         description: "Target branch to validate"
         required: true
